@@ -15,13 +15,13 @@
 			<% products.forEach(product =>{ %>
 				<div class="product__container">
 					<div class="product__info">
-						<a class="product__link" href="/products/<%=product.id%>"><img src=<%=product.imgSrc%> alt="Flowers Img"></a>
+						<a class="product__link" href="/products/<%=product.id%>"><img src=<%= product.imgSrc %> alt="Flowers Img"></a>
 						<p class="product__price"><%= product.price%> $</p>
 						<a class="product__link" href="/products/<%=product.id%>"><%= product.title %></a>
 					</div>
 					<div class="product__actions actions">
 						<a href="/products/edit/<%= product.id %>" class="product__btn" >Edit</a>
-						<button onclick="deleteProduct(<%=product.id %>)" class="product__btn">Delete</button>
+						<button onclick="deleteProduct('<%= product.id %>')" class="product__btn">Delete</button>
 					</div>
 				</div>
 			<%})%>

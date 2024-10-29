@@ -1,10 +1,3 @@
-// Задача. За прикладом, який ми розглянули на уроці розробити додаток з такими операціями стосовно контексту, який ви виберете:
-// відображення списку елементів
-// відображення детальної інформації про елемент маючи id
-// додавання нового елемента
-// потім додамо редагування
-// потім додамо видалення
-
 
 import express from "express";
 import path from "path";
@@ -14,9 +7,13 @@ import { fileURLToPath } from "url";
 import indexRouter from "./routes/index.mjs";
 import productsRouter from "./routes/products.mjs"
 
+import connectDB from './db/connectDb.mjs'
+
 const app = express();
 const __filename = fileURLToPath(import.meta.url); // get the resolved path to the
 const __dirname = path.dirname(__filename); // get the name of the directory
+
+connectDB()
 app.set("views", path.join(__dirname, "views"))
 app.set("view engine", "ejs");
 

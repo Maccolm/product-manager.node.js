@@ -45,12 +45,12 @@ class FormValidator {
 			trim: true,
 			escape: true,
 			isNumeric: {
-				errorMessage: "Must bea a number",
+				errorMessage: "Must be a number",
 			},
 			trim: true,
 			escape: true,
 		},
-		prodImg: {
+		imgSrc: {
 			custom: {
 				 options: (value, { req }) => {
 					  if (!req.file) {
