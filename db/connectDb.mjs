@@ -8,8 +8,6 @@ mongoose.Promise = global.Promise
 export default async function () { 
   try { 
     await mongoose.connect(config.mongoURI, { 
-      useNewUrlParser: true, 
-      useUnifiedTopology: true, 
     }) 
     console.log('Successful connected to MongoDB') 
   } catch (err) { 
