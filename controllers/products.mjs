@@ -17,8 +17,10 @@ class ProductController {
 					filters[key] = req.query[key]
 			}
 			const productList = await ProductsDBService.getList(filters)
+			const providers = await ProvidersDBService.getList()
 			res.render('products/productsList' , {
-				products: productList
+				products: productList,
+				providers
 			})
 		} catch (error) {
 			res.status(500).json({ error: error.message })
@@ -50,7 +52,8 @@ class ProductController {
 		try {
 			const product = await ProductsDBService.getById(req.params.id)
 			const providers = await ProvidersDBService.getList()
-			res.render('products/productForm', { errors: [], product, providers })
+			const imgSrc = product.imgSrc ? `/uploads/${product.imgSrc}` : null
+			res.render('products/productForm', { errors: [], product, providers, imgSrc })
 		} catch (error) {
 			res.status(500).json({ error: error.message })
 		}
@@ -104,8 +107,22 @@ class ProductController {
 		console.log(req.body)
 
 		try {
+			const existingProduct = await ProductsDBService.getById(req.params.id)
+
 			const updatedProductData = req.file ? { imgSrc: req.file.filename, ...req.body, providers} : req.body
-	
+			if (!existingProduct) {
+					return res.status(404).render('products/productForm', {
+						errors: [{ msg: 'Product not found' }],
+						product: req.body,
+						providers,
+					});
+				}
+			if (req.file) {
+				const oldImgPath = path.join(__dirname, '../uploads', existingProduct.imgSrc)
+				await ProductController.deleteImg(oldImgPath)
+
+				req.body.imgSrc = req.file.filename
+			}
 			await ProductsDBService.update(req.params.id, updatedProductData)
 			res.redirect('/products')
 		} catch (error) {

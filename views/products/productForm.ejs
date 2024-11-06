@@ -83,7 +83,7 @@
 					accept="image/*" 
 					name="imgSrc"
 					onchange="onInputFile(event)">
-				<img id="imgPreview" src="/upload-.jpg" class="prod-picture" alt="uploaded picture">
+				<img id="imgPreview" src="<% <%= product.imgSrc%> ? <%= product.imgSrc%> : /upload-.jpg %>" class="prod-picture" alt="uploaded picture">
 			</div>
 			<button class="product__btn filter__btn" type="submit"><%=product?.id ? 'Edit' : 'Create' %></button>
 			<a href="/products" class="product__btn">Cancel</a>
