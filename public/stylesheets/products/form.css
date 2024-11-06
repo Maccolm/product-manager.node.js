@@ -12,7 +12,7 @@
 	flex-direction: column;
 	gap: 10px;
 } 
-.form__section input, textarea {
+.form__section input, textarea, select {
 	outline: none;
 	transition: all 0.3s ease 0s;
 	padding: 10px;

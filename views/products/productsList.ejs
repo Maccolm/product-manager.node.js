@@ -11,6 +11,24 @@
 <body>
 	<div class="wrapper">
 		<a class="main-page__btn" href="/"><span class="main-page__btn-span"></span> To The Main Page</a>
+		<form class="form form-filter" action="/products" method="get">
+			<input
+				class="filter__input"
+				type="text" 
+				id="title" 
+				name="title"
+				placeholder="Name"
+			>
+			<input 
+				class="filter__input"
+				type="number" 
+				id="price" 
+				name="price"
+				placeholder="Price"
+			>
+			<button class="product__btn" type="submit">Filter</button>
+			<a href="/products" class="product__btn">Clear filter</a>
+	</form>
 		<div class="wrapper__product">
 			<% products.forEach(product =>{ %>
 				<div class="product__container">
@@ -18,6 +36,7 @@
 						<a class="product__link" href="/products/<%=product.id%>"><img src=<%= product.imgSrc %> alt="Flowers Img"></a>
 						<p class="product__price"><%= product.price%> $</p>
 						<a class="product__link" href="/products/<%=product.id%>"><%= product.title %></a>
+						<p class="product__text"><span>Distributor:</span> <%= product.provider?.title %></p>
 					</div>
 					<div class="product__actions actions">
 						<a href="/products/edit/<%= product.id %>" class="product__btn" >Edit</a>

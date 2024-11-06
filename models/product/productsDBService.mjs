@@ -1,17 +1,12 @@
 import Product from './Product.mjs' 
-import mongoose from 'mongoose' 
  
 class ProductsDBService { 
-  static async getList() { 
+  static async getList(filters) { 
     try { 
-      const exists = await Product.checkCollectionExists 
-      if (exists) { 
-        const data = await mongoose.model(collectionName).find().exec() 
-        return data 
-      } 
- 
-      return (await Product.find({})) ?? [] 
+      return await Product.find(filters).populate('provider')
     } catch (error) { 
+		console.log(error);
+		
       return [] 
     } 
   } 
@@ -27,7 +22,7 @@ class ProductsDBService {
  
   static async getById(id) { 
 	try {
-		return await Product.findById(id) 
+		return await Product.findById(id).populate('provider')
 	} catch (error) {
 		console.error('error to get product', error);
 		return null

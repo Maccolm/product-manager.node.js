@@ -31,9 +31,21 @@ const productSchema = new Schema({
 		required: [true, 'number of stems is required'], 
 		trim: true, 
 	},
+	info: {
+		type: String,
+		trim: true, 
+	},
 	imgSrc: {
 		type: String
-	}
+	},
+	provider: { 
+		type: Schema.Types.ObjectId, 
+		ref: 'Provider',
+		required: [true, 'Provider is required'], 
+		minlength: [3, 'Provider must be at least 3 characters long'], 
+		maxlength: [80, 'Provider must be at most 80 characters long'], 
+		trim: true, 
+	 }, 
 })
 
 productSchema.static.checkDatabaseExists = async () => { 

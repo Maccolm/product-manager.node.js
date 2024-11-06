@@ -6,6 +6,7 @@
 		<link rel="stylesheet" href="../stylesheets/style.css" />
 		<link rel="stylesheet" href="../stylesheets/products/details.css" />
 		<link rel="shortcut icon" href="../images/icon-favicon.png" type="image/x-icon">
+		<script src="../javascripts/products.js"></script>
 		<title><%=product.title%></title>
 	</head>
 	<body>
@@ -19,8 +20,11 @@
 				<div class="product__info">
 					<p class="product__title"><%= product.title %></p>
 					<p class="product__price"><%= product.price%> $</p>
+					<span class="divider"></span>
 					<div class="product__desc">
 						<p class="product__text"><%= product.info %></p>
+						<span class="divider"></span>
+						<p class="product__text"> Distributor: <%= product.provider?.title %></p>
 						<span class="divider"></span>
 						<h2>What Including?</h2>
 						<p class="product__text">
@@ -29,8 +33,8 @@
 					</div>
 					<span class="divider"></span>
 					<div class="product__actions actions">
-						<button class="product__btn">Edit</button>
-						<button class="product__btn">Delete</button>
+						<a href="/products/edit/<%= product.id %>"  class="product__btn">Edit</a>
+						<button onclick="deleteProduct('<%= product.id %>')"  class="product__btn">Delete</button>
 					</div>
 				</div>
 			</div>

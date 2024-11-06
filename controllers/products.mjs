@@ -1,4 +1,5 @@
 import ProductsDBService from '../models/product/productsDBService.mjs'
+import ProvidersDBService from '../models/provider/providersDBService.mjs'
 import { validationResult } from 'express-validator'
 import fs from 'fs'
 import path from 'path'
@@ -10,7 +11,12 @@ const __dirname = path.dirname(__filename)
 class ProductController {
 	static async allProducts(req, res) {
 		try {
-			const productList = await ProductsDBService.getList()
+			const filters = {}
+			for(const key in req.query){
+				if(req.query[key])
+					filters[key] = req.query[key]
+			}
+			const productList = await ProductsDBService.getList(filters)
 			res.render('products/productsList' , {
 				products: productList
 			})
@@ -22,16 +28,20 @@ class ProductController {
 		try{
 			const id = req.params.id
 			const product = await ProductsDBService.getById(id)
+			
 			res.render('products/productDetails', {
-				product
+				product,
 			})
 		} catch {
 			res.status(500).json({ error: error.message })
 		}
 	}
-	static createForm(req, res) {
+	static async createForm(req, res) {
 		try{
-			res.render('products/productForm', { errors: [], product: null })
+			const providers = await ProvidersDBService.getList()
+			console.log('Poviders:', providers);
+			
+			res.render('products/productForm', { errors: [], product: null, providers })
 		} catch (error) {
 			res.status(500).json({ error: error.message })
 		}
@@ -39,7 +49,8 @@ class ProductController {
 	static async editProductForm(req, res) {
 		try {
 			const product = await ProductsDBService.getById(req.params.id)
-			res.render('products/productForm', { errors: [], product })
+			const providers = await ProvidersDBService.getList()
+			res.render('products/productForm', { errors: [], product, providers })
 		} catch (error) {
 			res.status(500).json({ error: error.message })
 		}
@@ -48,17 +59,19 @@ class ProductController {
 		const errors = validationResult(req)
 		console.log('========errors');
 		console.log(errors);
-		
+		const providers = await ProvidersDBService.getList()
+
 		if(!errors.isEmpty()) {
 			const data = req.body
 			if(req.params.id) data.id = req.params.id
 			return res.status(400).render('products/productForm', { 
 				errors: errors.array(),
-				product: data 
+				product: data,
+				providers 
 			})
 		}
 		try {
-			const productData = { imgSrc: req.file.filename, ...req.body }
+			const productData = { imgSrc: req.file.filename, ...req.body, providers }
 			console.log(productData);
 			
 			await ProductsDBService.create(productData)
@@ -67,6 +80,7 @@ class ProductController {
 			res.status(500).render('products/productForm', {
 				errors: [{ msg: error.message }],
 				product: req.body,
+				providers
 			 })
 		}
 	}
@@ -76,19 +90,21 @@ class ProductController {
 		const errors = validationResult(req)
 		console.log('========errors');
 		console.log(errors);
-		
+		const providers = await ProvidersDBService.getList()
+
 		if(!errors.isEmpty()) {
 			const data = req.body
 			if(req.params.id) data.id = req.params.id
 			return res.status(400).render('products/productForm', { 
 				errors: errors.array(),
-				product: data
+				product: data,
+				providers
 			})
 		}
 		console.log(req.body)
 
 		try {
-			const updatedProductData = req.file ? { imgSrc: req.file.filename, ...req.body} : req.body
+			const updatedProductData = req.file ? { imgSrc: req.file.filename, ...req.body, providers} : req.body
 	
 			await ProductsDBService.update(req.params.id, updatedProductData)
 			res.redirect('/products')
@@ -96,6 +112,7 @@ class ProductController {
 			res.status(500).render('products/productForm', {
 				errors: [{ msg: error.message }],
 				product: req.body,
+				providers
 			 });
 		}
 	}
