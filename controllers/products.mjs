@@ -17,10 +17,8 @@ class ProductController {
 					filters[key] = req.query[key]
 			}
 			const productList = await ProductsDBService.getList(filters)
-			const providers = await ProvidersDBService.getList()
 			res.render('products/productsList' , {
-				products: productList,
-				providers
+				products: productList
 			})
 		} catch (error) {
 			res.status(500).json({ error: error.message })

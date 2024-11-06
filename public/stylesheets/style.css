@@ -166,13 +166,6 @@ img {
 .filter__btn{
 	margin-right: 10px;
 }
-.filter__select {
-	outline: none;
-	transition: all 0.3s ease 0s;
-	padding: 10px;
-	border-radius: 6px;
-	border: none;
-}
 .product__text {
 	text-transform: capitalize;
 	font-size: 18px;
