@@ -41,9 +41,9 @@ class ProductController {
 	static async createForm(req, res) {
 		try{
 			const providers = await ProvidersDBService.getList()
-			console.log('Poviders:', providers);
-			
-			res.render('products/productForm', { errors: [], product: null, providers })
+			console.log('Providers:', providers);
+			const imgSrc = '/uploads/upload-.jpg'
+			res.render('products/productForm', { errors: [], product: null, providers, imgSrc })
 		} catch (error) {
 			res.status(500).json({ error: error.message })
 		}
@@ -52,8 +52,11 @@ class ProductController {
 		try {
 			const product = await ProductsDBService.getById(req.params.id)
 			const providers = await ProvidersDBService.getList()
-			const imgSrc = product.imgSrc ? `/uploads/${product.imgSrc}` : null
+			const imgPath = path.join(__dirname, '../uploads', product.imgSrc || 'upload-.jpg')
+			const imgSrc = fs.existsSync(imgPath) ? `/uploads/${product.imgSrc}` : '/uploads/upload-.jpg'
+			console.log('imgSrc=======>',imgSrc)
 			res.render('products/productForm', { errors: [], product, providers, imgSrc })
+			
 		} catch (error) {
 			res.status(500).json({ error: error.message })
 		}
@@ -109,20 +112,25 @@ class ProductController {
 		try {
 			const existingProduct = await ProductsDBService.getById(req.params.id)
 
-			const updatedProductData = req.file ? { imgSrc: req.file.filename, ...req.body, providers} : req.body
 			if (!existingProduct) {
-					return res.status(404).render('products/productForm', {
-						errors: [{ msg: 'Product not found' }],
-						product: req.body,
-						providers,
-					});
-				}
+				return res.status(404).render('products/productForm', {
+					errors: [{ msg: 'Product not found' }],
+					product: req.body,
+					providers,
+				});
+			}
+			const { currentImgSrc } = req.body
+			let imgSrc = currentImgSrc || existingProduct.imgSrc
+			console.log('old img path =======>', imgSrc)
+			
 			if (req.file) {
 				const oldImgPath = path.join(__dirname, '../uploads', existingProduct.imgSrc)
-				await ProductController.deleteImg(oldImgPath)
-
-				req.body.imgSrc = req.file.filename
+				if(fs.existsSync(oldImgPath)) {
+					await ProductController.deleteImg(oldImgPath)
+				}
+				imgSrc = req.file.filename
 			}
+			const updatedProductData = req.file ? { ...req.body, imgSrc: req.file.filename, providers} : {...req.body, imgSrc, providers}
 			await ProductsDBService.update(req.params.id, updatedProductData)
 			res.redirect('/products')
 		} catch (error) {

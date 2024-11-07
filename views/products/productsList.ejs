@@ -39,7 +39,7 @@
 			<% products.forEach(product =>{ %>
 				<div class="product__container">
 					<div class="product__info">
-						<a class="product__link" href="/products/<%=product.id%>"><img src=<%= product.imgSrc %> alt="Flowers Img"></a>
+						<a class="product__link" href="/products/<%=product.id%>"><img src= "/uploads/<%= product.imgSrc %>" alt="Flowers Img"></a>
 						<p class="product__price"><%= product.price%> $</p>
 						<a class="product__link" href="/products/<%=product.id%>"><%= product.title %></a>
 						<p class="product__text"><span>Distributor:</span> <%= product.provider?.title %></p>

@@ -50,16 +50,16 @@ class FormValidator {
 			trim: true,
 			escape: true,
 		},
-		imgSrc: {
-			custom: {
-				 options: (value, { req }) => {
-					  if (!req.file) {
-							throw new Error('Image file is required');
-					  }
-					  return true;
-				 },
-			},
-	  },
+	// 	imgSrc: {
+	// 		custom: {
+	// 			 options: (value, { req }) => {
+	// 				  if (!req.file) {
+	// 						throw new Error('Image file is required');
+	// 				  }
+	// 				  return true;
+	// 			 },
+	// 		},
+	//   },
 	}
 }
 
