@@ -146,17 +146,16 @@ class ProductController {
 			const product = await ProductsDBService.getById(req.body.id)
 			if(!product) 
 				return res.status(404).json({ success: false, message: 'Product not found' })
-
-			const imgPath = path.join(__dirname, '../uploads', product.imgSrc)
 			
 			await ProductsDBService.deleteById(req.body.id)
-			await ProductController.deleteImg(imgPath)
+			await ProductController.deleteImg(product.imgSrc)
 			res.json({ success: true }) 
 		} catch (error) {
 			res.status(500).json({ success: false, message: 'Failed to delete product' })
 		}
 	}
-	static async deleteImg(imgPath) {
+	static async deleteImg(imgSrc) {
+		const imgPath = path.join(__dirname, '../uploads', imgSrc)
 		try{
 			if (fs.existsSync(imgPath)) {
 				fs.unlink(imgPath, (err) => {
