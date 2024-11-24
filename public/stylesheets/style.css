@@ -51,8 +51,12 @@ img {
 	background-color: #f3e1fa;
 	border: none;
 	cursor: pointer;
-}.product__btn:hover{
+}
+.product__btn:hover{
 	background-color: #f1cdff;
+}
+.btn {
+	margin-left: 10px;
 }
 .container{
 	margin: auto;
@@ -172,4 +176,7 @@ img {
 }
 .product__text span {
 	font-size: 16px;
+}
+.actions {
+	margin-top: 25px;
 }

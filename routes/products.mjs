@@ -3,6 +3,7 @@ import { Router } from 'express'
 import multer from 'multer'
 import FormValidator from '../validators/formValidator.mjs'
 import { checkSchema } from 'express-validator'
+import { ensureAuthenticated } from '../middleware/auth.mjs'
 
 const router = Router()
 
@@ -18,10 +19,23 @@ const upload = multer({ storage })
 
 router.get('/', ProductController.allProducts)
 router.get('/create', ProductController.createForm)
-router.post('/create', upload.single('imgSrc'), checkSchema(FormValidator.formSchema), ProductController.createProduct)
+router.post('/create', 
+	ensureAuthenticated,
+	upload.single('imgSrc'),
+	checkSchema(FormValidator.formSchema), 
+	ProductController.createProduct)
 router.get('/:id', ProductController.productDetails)
 router.get('/edit/:id', ProductController.editProductForm)
-router.post('/edit/:id', upload.single('imgSrc'), checkSchema(FormValidator.formSchema), ProductController.updateProduct)
-router.post('/', ProductController.createProduct)
-router.delete('/', ProductController.deleteProduct)
+router.post('/edit/:id',
+	ensureAuthenticated, 
+	upload.single('imgSrc'), 
+	checkSchema(FormValidator.formSchema), 
+	ProductController.updateProduct)
+router.post('/', 
+	ensureAuthenticated, 
+	ProductController.createProduct)
+router.delete('/', 
+	ensureAuthenticated, 
+	ProductController.deleteProduct)
+	
 export default router

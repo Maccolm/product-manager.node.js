@@ -1,7 +1,20 @@
-import { Router } from 'express'
+import express from 'express'
+import UserController from '../controllers/userController.mjs'
+import UserValidator from '../validators/userValidator.mjs'
+import { checkSchema } from 'express-validator'
 
-const router = Router()
-router.get('/', (req, res) => {
-res.send('respond with a resource')
-})
+const router = express.Router()
+
+router.get('/', UserController.usersList)
+
+router.get('/register/:id?', UserController.registerForm)
+
+router.post(
+  '/register/:id?',
+  checkSchema(UserValidator.userSchema),
+  UserController.registerUser
+)
+
+router.delete('/', UserController.deleteUser)
+
 export default router
