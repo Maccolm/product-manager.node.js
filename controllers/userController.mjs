@@ -47,7 +47,8 @@ class UserController {
     const errors = validationResult(req)
     const data = req.body
     const types = await TypesDBService.getList()
-
+	console.log(data);
+	
     if (!errors.isEmpty()) {
       if (req.params.id) data.id = req.params.id
       return res.status(400).render('users/register', {
@@ -82,7 +83,7 @@ class UserController {
 
   static async deleteUser(req, res) {
     try {
-      await UsersDBService.deleteById(req.body.id)
+      await UsersDBService.deleteById(req.params.id)
       res.json({ success: true })
     } catch (error) {
       res.status(500).json({ success: false, message: 'Failed to delete user' })

@@ -34,10 +34,8 @@
 				</tr>
 				<% } else { %>
 					<% users.forEach(user => { %>
-				<tr>
-					<td><img src="<%= user.img %>" /></td>
+				<tr style="margin-bottom: 12px;">
 					<td><%= user.username %></td>
-					<td><%= user.age %></td>
 					<td><%= user.type.title %></td>
 					<td><%= user.email %></td>
 					<td>

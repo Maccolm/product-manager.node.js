@@ -11,19 +11,19 @@ class RequestManager {
 	  return data
 	}
  
-	static async deleteRequest(route, body) {
+	static async deleteRequest(route, id) {
 	  console.log('route')
 	  console.log(route)
  
 	  console.log('====>> body')
-	  console.log(body)
+	  console.log(id)
  
-	  const response = await fetch(route, {
+	  const response = await fetch(`${route}/${id}`, {
 		 method: 'DELETE',
 		 headers: {
 			'Content-Type': 'application/json',
 		 },
-		 body: JSON.stringify(body),
+		
 	  })
 	  const data = await response.json()
 	  // Оновлення поточного вікна без використання кешу
