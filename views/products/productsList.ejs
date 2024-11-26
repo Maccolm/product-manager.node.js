@@ -44,10 +44,12 @@
 						<a class="product__link" href="/products/<%=product.id%>"><%= product.title %></a>
 						<p class="product__text"><span>Distributor:</span> <%= product.provider?.title %></p>
 					</div>
-					<div class="product__actions actions">
-						<a href="/products/edit/<%= product.id %>" class="product__btn" >Edit</a>
-						<button onclick="deleteProduct('<%= product.id %>')" class="product__btn">Delete</button>
-					</div>
+					<%if(user) {%>
+						<div class="product__actions actions">
+							<a href="/products/edit/<%= product.id %>" class="product__btn" >Edit</a>
+							<button onclick="deleteProduct('<%= product.id %>')" class="product__btn">Delete</button>
+						</div>
+					<%}%>	
 				</div>
 			<%})%>
 		</div>

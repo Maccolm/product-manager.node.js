@@ -6,7 +6,7 @@ import usersRouter from './users.mjs'
 const router = express.Router()
 
 router.get('/', (req, res) => {
-	res.render('index')
+	res.render('index', { user: req.user })
 })
 router.use('/auth', authRouter)
 router.use('/products', productsRouter)

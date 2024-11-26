@@ -5,7 +5,7 @@ const router = express.Router()
 
 //render login page
 router.get('/login', (req, res) => {
-  res.render('login', { messages: null })
+  res.render('users/login', { messages: null })
 })
 
 //login
@@ -15,14 +15,11 @@ router.post(
     next()
   },
   passport.authenticate('local', {
-    // successRedirect: '/users',
     failureRedirect: '/auth/login',
-    // failureRedirect: '/',
-    // failureFlash: true,
-  }),
-  function (req, res) {
-    res.redirect('/')
-  }
+	}),
+	(req, res) => {
+	  res.redirect('/')
+	}
 )
 
 // logout

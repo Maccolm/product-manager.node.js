@@ -14,7 +14,7 @@ class UserController {
 
       res.render('users/usersList', {
         users: dataList,
-        user: req.user,
+        userr: req.user,
       })
     } catch (err) {
       res.status(500).json({ error: err.message })
@@ -47,7 +47,6 @@ class UserController {
     const errors = validationResult(req)
     const data = req.body
     const types = await TypesDBService.getList()
-	console.log(data);
 	
     if (!errors.isEmpty()) {
       if (req.params.id) data.id = req.params.id

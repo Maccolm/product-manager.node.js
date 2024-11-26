@@ -20,7 +20,8 @@ class ProductController {
 			const providers = await ProvidersDBService.getList()
 			res.render('products/productsList' , {
 				products: productList,
-				providers
+				providers,
+				user: req.user
 			})
 		} catch (error) {
 			res.status(500).json({ error: error.message })

@@ -21,10 +21,11 @@
 			<thead>
 				<tr>
 					<th>Name</th>
-					<th>age</th>
 					<th>Type</th>
 					<th>Email</th>
-					<th>Actions</th>
+					<% if(userr) {%>
+						<th>Actions</th>
+					<% } %>
 				</tr>
 			</thead>
 			<tbody>
@@ -38,23 +39,27 @@
 					<td><%= user.username %></td>
 					<td><%= user.type.title %></td>
 					<td><%= user.email %></td>
-					<td>
-						<a class="product__btn" href="/users/register/<%= user._id %>">Edit</a>
-						<button
-							class="product__btn"
-							onclick="RequestManager.deleteRequest('/users', '<%= user._id %>' )"
-						>
-							Delete
-						</button>
-					</td>
+					<% if(userr) {%>
+						<td>
+							<a class="product__btn" href="/users/register/<%= user._id %>">Edit</a>
+							<button
+								class="product__btn"
+								onclick="RequestManager.deleteRequest('/users', '<%= user._id %>' )"
+							>
+								Delete
+							</button>
+						</td>
+					<% } %>
 				</tr>
 				<% }) %> 
 				<%}%>
 			</tbody>
 		</table>
 		<hr />
-		<div class="actions">
-			<a class="product__btn" href="/users/register">Add User</a>
-		</div>
+		<% if(userr) {%>
+			<div class="actions">
+				<a class="product__btn" href="/users/register">Add User</a>
+			</div>
+		<% } %>
 	</body>
 </html>

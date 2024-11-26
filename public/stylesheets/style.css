@@ -9,6 +9,13 @@ body {
 	color: #333;
 	padding: 20px;
 }
+th,td{
+	padding: 5px 15px;
+	background-color: rgb(149, 183, 183);
+}
+td {
+	background-color: #f0f2fd;
+}
 @media screen and (max-width: 768px) {
 	body{
 		padding: 10px;

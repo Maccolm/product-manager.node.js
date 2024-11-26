@@ -13,8 +13,15 @@
     <div class="container">
 		<a class='product__btn' href="/about">About us</a>
 		<a class='product__btn' href="/products">Products</a>
-		<a class='product__btn' href="/products/create">Add product</a>
+		<% if(user) { %>
+			<a class='product__btn' href="/products/create">Add product</a>
+		<% } %>
 		<a class='product__btn' href="/users">Users</a>
+		<% if(user) { %>
+			<a class='product__btn' href="/auth/logout">Logout (<%= user.username %>)</a>
+		<% } else {%>
+			<a class='product__btn' href="/auth/login">Login</a>	
+		<% } %>
 	 </div>
   </body>
 </html>
