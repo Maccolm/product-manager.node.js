@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Document</title>
+		<script src="/javascripts/RequestManager.js"></script>
+		<link rel="stylesheet" href="/stylesheets/style.css" />
+		<link rel="stylesheet" href="/stylesheets/products/form.css" />
+	</head>
+	<body>
+		<form action="/users" method="get">
+			<input type="text" name="name" placeholder="Name" />
+			<input type="number" name="age" placeholder="age" />
+			<button class="product__btn" type="submit">Filter</button>
+			<a class="product__btn" href="/users"> Clear filters </a>
+			<a class="product__btn btn" href="/"> To the main page</a>
+		</form>
+		<hr />
+		<table>
+			<thead>
+				<tr>
+					<th>Name</th>
+					<th>Type</th>
+					<th>Email</th>
+					<% if(userr) {%>
+						<th>Actions</th>
+					<% } %>
+				</tr>
+			</thead>
+			<tbody>
+				<% if (users.length === 0) { %>
+				<tr>
+					<td colspan="6">No users found.</td>
+				</tr>
+				<% } else { %>
+					<% users.forEach(user => { %>
+				<tr style="margin-bottom: 12px;">
+					<td><%= user.username %></td>
+					<td><%= user.type.title %></td>
+					<td><%= user.email %></td>
+					<% if(userr) {%>
+						<td>
+							<a class="product__btn" href="/users/register/<%= user._id %>">Edit</a>
+							<button
+								class="product__btn"
+								onclick="RequestManager.deleteRequest('/users', '<%= user._id %>' )"
+							>
+								Delete
+							</button>
+						</td>
+					<% } %>
+				</tr>
+				<% }) %> 
+				<%}%>
+			</tbody>
+		</table>
+		<hr />
+		<% if(userr) {%>
+			<div class="actions">
+				<a class="product__btn" href="/users/register">Add User</a>
+			</div>
+		<% } %>
+	</body>
+</html>
