@@ -6,5 +6,6 @@ export default Object.freeze({
   databaseUrl: process.env.MONGODB_URL, 
   mongoURI: `${process.env.MONGODB_URL}${process.env.DATABASE_NAME}`, 
   port: process.env.PORT, 
-  secretKey: 'my secret key'
+  secretKey: 'my secret key',
+  tokenKey: 'Our Token Key'
 }) 
