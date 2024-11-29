@@ -1,5 +1,5 @@
 import mongoose from 'mongoose' 
-import config from '../../config/default.mjs' 
+import config from '../../../../config/default.mjs' 
  
 const { Schema } = mongoose 
  

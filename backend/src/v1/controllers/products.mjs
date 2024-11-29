@@ -17,8 +17,8 @@ class ProductController {
 					filters[key] = req.query[key]
 			}
 			const productList = await ProductsDBService.getList(filters)
-			const providers = await ProvidersDBService.getList()
-			res.render('products/productsList' , {
+			const providers = await ProvidersDBService.getList()			
+			res.json({
 				products: productList,
 				providers,
 				user: req.user
@@ -32,7 +32,7 @@ class ProductController {
 			const id = req.params.id
 			const product = await ProductsDBService.getById(id)
 			
-			res.render('products/productDetails', {
+			res.json({
 				product,
 			})
 		} catch {
@@ -44,7 +44,7 @@ class ProductController {
 			const providers = await ProvidersDBService.getList()
 			console.log('Providers:', providers);
 			const imgSrc = '/uploads/upload-.jpg'
-			res.render('products/productForm', { errors: [], product: null, providers, imgSrc })
+			res.json({ errors: [], product: null, providers, imgSrc })
 		} catch (error) {
 			res.status(500).json({ error: error.message })
 		}
@@ -56,7 +56,7 @@ class ProductController {
 			const imgPath = path.join(__dirname, '../uploads', product.imgSrc || 'upload-.jpg')
 			const imgSrc = fs.existsSync(imgPath) ? `/uploads/${product.imgSrc}` : '/uploads/upload-.jpg'
 			console.log('imgSrc=======>',imgSrc)
-			res.render('products/productForm', { errors: [], product, providers, imgSrc })
+			res.json({ errors: [], product, providers, imgSrc })
 			
 		} catch (error) {
 			res.status(500).json({ error: error.message })
@@ -71,7 +71,7 @@ class ProductController {
 		if(!errors.isEmpty()) {
 			const data = req.body
 			if(req.params.id) data.id = req.params.id
-			return res.status(400).render('products/productForm', { 
+			return res.status(400).json({ 
 				errors: errors.array(),
 				product: data,
 				providers 
@@ -84,7 +84,7 @@ class ProductController {
 			await ProductsDBService.create(productData)
 			res.redirect('/products')
 		} catch (error) {
-			res.status(500).render('products/productForm', {
+			res.status(500).json({
 				errors: [{ msg: error.message }],
 				product: req.body,
 				providers
@@ -102,7 +102,7 @@ class ProductController {
 		if(!errors.isEmpty()) {
 			const data = req.body
 			if(req.params.id) data.id = req.params.id
-			return res.status(400).render('products/productForm', { 
+			return res.status(400).json({ 
 				errors: errors.array(),
 				product: data,
 				providers
@@ -114,7 +114,7 @@ class ProductController {
 			const existingProduct = await ProductsDBService.getById(req.params.id)
 
 			if (!existingProduct) {
-				return res.status(404).render('products/productForm', {
+				return res.status(404).json({
 					errors: [{ msg: 'Product not found' }],
 					product: req.body,
 					providers,
@@ -135,7 +135,7 @@ class ProductController {
 			await ProductsDBService.update(req.params.id, updatedProductData)
 			res.redirect('/products')
 		} catch (error) {
-			res.status(500).render('products/productForm', {
+			res.status(500).json({
 				errors: [{ msg: error.message }],
 				product: req.body,
 				providers
