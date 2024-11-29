@@ -1,8 +1,8 @@
 import passport from 'passport'
 import { Strategy as LocalStrategy } from 'passport-local'
 import bcrypt from 'bcryptjs'
-import User from '../models/user/User.mjs'
-import UsersDBService from '../models/user/UsersDBService.mjs'
+import User from '../src/v1/models/user/User.mjs'
+import UsersDBService from '../src/v1/models/user/UsersDBService.mjs'
 
 // Налаштування локальної стратегії
 passport.use(
