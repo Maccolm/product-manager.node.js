@@ -1,5 +1,6 @@
-import User from "../models/user/User.mjs";
-import UsersDBService from "../models/user/UsersDBService.mjs";
+import User from "../models/user/User.mjs"
+import UsersDBService from "../models/user/UsersDBService.mjs"
+import { prepareToken } from "../../../utils/jwtHelpers.mjs";
 
 class AuthController {
 	// ---- автентиікація -----
@@ -11,15 +12,20 @@ class AuthController {
 			return res.status(401).json({ error: "Password is required" });
 		}
 		try {
+			console.log("Finding user by email:", req.body.email);
 			const user = await UsersDBService.findOne({
 				email: req.body.email,
 			});
 			if (!user) {
+				console.log("User not found for email:", req.body.email);
 				return res.status(401).json({ error: "User not found" });
 			}
+			console.log("Validating password for user:", user.email);
 			if (!user.validPassword(req.body.password)) {
+				console.log("Invalid password for user:", user.email);
 				return res.status(401).json({ error: "Login error" });
 			}
+			console.log("Preparing token for user:", user.email);
 			const token = prepareToken(
 				{
 					id: user._id,
@@ -32,6 +38,7 @@ class AuthController {
 				token,
 			});
 		} catch (err) {
+			console.error("Error in login:", err);
 			res.status(401).json({ error: "Login error" });
 		}
 	}

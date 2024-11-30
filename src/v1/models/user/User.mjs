@@ -50,6 +50,11 @@ userSchema.pre('save', async function (next) {
   this.password = await bcrypt.hash(this.password, salt)
   next()
 })
-
+//---------------- Функція для перевірки правильності пароля ------------
+userSchema.methods.validPassword = async function (password) {
+	const isMatch = await bcrypt.compare(password, this.password)
+ 
+	return isMatch
+ }
 const User = mongoose.model('User', userSchema)
 export default User

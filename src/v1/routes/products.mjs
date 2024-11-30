@@ -31,7 +31,7 @@ router.post('/edit/:id',
 	ProductController.updateProduct)
 router.post('/', 
 	ProductController.createProduct)
-router.delete('/', 
+router.delete('/:id', 
 	ProductController.deleteProduct)
 	
 export default router
