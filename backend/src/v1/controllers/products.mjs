@@ -82,9 +82,11 @@ class ProductController {
 			console.log(productData);
 			
 			await ProductsDBService.create(productData)
-			res.redirect('/products')
+			return res.status(200).json({
+				massage: 'Product created successfully' 
+			})
 		} catch (error) {
-			res.status(500).json({
+			return res.status(500).json({
 				errors: [{ msg: error.message }],
 				product: req.body,
 				providers
@@ -133,9 +135,11 @@ class ProductController {
 			}
 			const updatedProductData = req.file ? { ...req.body, imgSrc: req.file.filename, providers} : {...req.body, imgSrc, providers}
 			await ProductsDBService.update(req.params.id, updatedProductData)
-			res.redirect('/products')
+			return res.status(200).json({
+				massage: 'Product updated successfully' 
+			})
 		} catch (error) {
-			res.status(500).json({
+			return res.status(500).json({
 				errors: [{ msg: error.message }],
 				product: req.body,
 				providers
@@ -144,11 +148,12 @@ class ProductController {
 	}
 	static async deleteProduct(req, res) {
 		try {
-			const product = await ProductsDBService.getById(req.body.id)
+			const productId = req.params.id
+			const product = await ProductsDBService.getById(productId)
 			if(!product) 
 				return res.status(404).json({ success: false, message: 'Product not found' })
 			
-			await ProductsDBService.deleteById(req.body.id)
+			await ProductsDBService.deleteById(productId)
 			await ProductController.deleteImg(product.imgSrc)
 			res.json({ success: true }) 
 		} catch (error) {
