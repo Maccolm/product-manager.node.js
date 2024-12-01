@@ -127,9 +127,10 @@ class ProductController {
 			console.log('old img path =======>', imgSrc)
 			
 			if (req.file) {
-				const oldImgPath = path.join(__dirname, '../uploads', existingProduct.imgSrc)
+				const oldImgPath = path.join(__dirname, '../../../uploads', existingProduct.imgSrc)
 				if(fs.existsSync(oldImgPath)) {
-					await ProductController.deleteImg(oldImgPath)
+					console.log('deleting old img', oldImgPath);
+					await ProductController.deleteImg(imgSrc)
 				}
 				imgSrc = req.file.filename
 			}
@@ -161,7 +162,8 @@ class ProductController {
 		}
 	}
 	static async deleteImg(imgSrc) {
-		const imgPath = path.join(__dirname, '../uploads', imgSrc)
+		const imgPath = path.join(__dirname, '../../../uploads', imgSrc)
+		console.log('Generated image path:', imgPath)
 		try{
 			if (fs.existsSync(imgPath)) {
 				fs.unlink(imgPath, (err) => {
@@ -172,7 +174,7 @@ class ProductController {
 					}
 				})
 			} else {
-				console.log('Image file not found');
+				console.log('Image file not found')
 			}
 		} catch (err) {
 			console.error('Error deleting image:', err);

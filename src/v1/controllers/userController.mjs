@@ -12,7 +12,7 @@ class UserController {
 
       const dataList = await UsersDBService.getList(filters)
 
-      res.render('users/usersList', {
+      res.json({
         users: dataList,
         userr: req.user,
       })
@@ -32,7 +32,7 @@ class UserController {
       const types = await TypesDBService.getList()
 
       //відредерити сторінку з формою
-      res.render('users/register', {
+      res.json({
         errors: [],
         data: user,
         types,
@@ -50,7 +50,7 @@ class UserController {
 	
     if (!errors.isEmpty()) {
       if (req.params.id) data.id = req.params.id
-      return res.status(400).render('users/register', {
+      return res.status(400).json({
         errors: errors.array(),
         data,
         types,
@@ -71,7 +71,7 @@ class UserController {
 
       res.redirect('/users')
     } catch (err) {
-      res.status(500).render('users/register', {
+      res.status(500).json({
         errors: [{ msg: err.message }],
         data,
         types,
