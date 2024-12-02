@@ -69,9 +69,11 @@ class UserController {
         await UsersDBService.create(dataObj)
       }
 
-      res.redirect('/users')
+     return res.status(200).json({
+		message: 'User created successfully'
+	  })
     } catch (err) {
-      res.status(500).json({
+      return res.status(500).json({
         errors: [{ msg: err.message }],
         data,
         types,
@@ -79,7 +81,21 @@ class UserController {
       })
     }
   }
-
+  static async getTypes(req, res) {
+	try {
+		const types = await TypesDBService.getList()
+		return res.status(200).json({
+			types,
+		})
+	}catch(err){
+		return res.status(500).json({
+			errors: [{ msg: err.message }],
+			data,
+			types,
+			user: req.user,
+		})
+	}
+  }
   static async deleteUser(req, res) {
     try {
       await UsersDBService.deleteById(req.params.id)
