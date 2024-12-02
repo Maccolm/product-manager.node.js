@@ -9,6 +9,8 @@ router.get('/', UserController.usersList)
 
 router.get('/register/:id?', UserController.registerForm)
 
+router.get('/types', UserController.getTypes)
+
 router.post(
   '/register/:id?',
   checkSchema(UserValidator.userSchema),
