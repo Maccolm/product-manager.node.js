@@ -37,16 +37,6 @@ class UserValidator {
       escape: true, // Екранує HTML символи
     },
   }
-  static checkFile(req, res, next) {
-    const errors = validationResult(req)
-    if (!errors.isEmpty()) {
-      if (req.file) {
-        // Видаляємо завантажений файл, якщо поля не валідні
-        fs.unlinkSync(req.file.path)
-      }
-    }
-    next()
-  }
 }
 
 export default UserValidator

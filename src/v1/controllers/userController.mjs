@@ -22,8 +22,12 @@ class UserController {
   }
 
   static async registerForm(req, res) {
+	console.log('change')
+	
     try {
       const id = req.params.id
+		console.log(id);
+		
       let user = null
       if (id) {
         //отримати об"єкт за id
@@ -32,14 +36,14 @@ class UserController {
       const types = await TypesDBService.getList()
 
       //відредерити сторінку з формою
-      res.json({
+      return res.json({
         errors: [],
         data: user,
         types,
         user: req.user,
       })
     } catch (err) {
-      res.status(500).json({ error: err.message })
+     return res.status(500).json({ error: err.message })
     }
   }
   static async registerUser(req, res) {
@@ -64,6 +68,7 @@ class UserController {
       if (req.params.id) {
         // Оновлюємо дані про користувача в базі даних
         await UsersDBService.update(req.params.id, dataObj)
+		  
       } else {
         // Додаємо користувача в базу даних
         await UsersDBService.create(dataObj)

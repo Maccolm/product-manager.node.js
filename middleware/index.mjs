@@ -4,7 +4,6 @@ import cookieParser from "cookie-parser";
 import { fileURLToPath } from "url";
 import loggerConfig from '../config/logger.mjs'
 import cors from 'cors'
-import mime from 'mime'
 
 import passport from "../config/passport.mjs"
 import sessionConfig from '../config/session.mjs'
