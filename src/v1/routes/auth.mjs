@@ -4,11 +4,6 @@ import UserController from '../controllers/userController.mjs'
 
 const router = express.Router()
 
-//render login page
-router.get('/login', (req, res) => {
-  res.render('users/login', { messages: null })
-})
-
 //login
 router.post('/login', AuthController.login)
 
