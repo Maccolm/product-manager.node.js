@@ -32,6 +32,7 @@ class AuthController {
 				{
 					id: user._id,
 					username: user.username,
+					role: user.type
 				},
 				req.headers
 			);

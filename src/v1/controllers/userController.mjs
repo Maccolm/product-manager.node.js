@@ -75,7 +75,7 @@ class UserController {
       }
 
      return res.status(200).json({
-		message: 'User created successfully'
+		message: ` ${req.params.id ? 'User edited successfully' : 'User created successfully'}`
 	  })
     } catch (err) {
       return res.status(500).json({
