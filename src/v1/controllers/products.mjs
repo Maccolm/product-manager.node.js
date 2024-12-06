@@ -1,6 +1,7 @@
 import ProductsDBService from '../models/product/productsDBService.mjs'
 import ProvidersDBService from '../models/provider/providersDBService.mjs'
 import { validationResult } from 'express-validator'
+import { ensureAdmin ,checkAdminWithJWTToken } from '../../../middleware/ensureAdmin.mjs'
 import fs from 'fs'
 import path from 'path'
 import { fileURLToPath } from 'url'
@@ -10,18 +11,21 @@ const __dirname = path.dirname(__filename)
 
 class ProductController {
 	static async allProducts(req, res) {
+		const filters = {}
 		try {
-			const filters = {}
 			for(const key in req.query){
 				if(req.query[key])
 					filters[key] = req.query[key]
 			}
 			const productList = await ProductsDBService.getList(filters)
-			const providers = await ProvidersDBService.getList()			
+			const providers = await ProvidersDBService.getList()
+			const isAdmin = await checkAdminWithJWTToken(req)
+			console.log('isAdmin controller' , isAdmin);
+			
 			res.json({
 				products: productList,
 				providers,
-				user: req.user
+				isAdmin
 			})
 		} catch (error) {
 			res.status(500).json({ error: error.message })
