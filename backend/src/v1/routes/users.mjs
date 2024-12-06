@@ -2,7 +2,7 @@ import express from 'express'
 import UserController from '../controllers/userController.mjs'
 import UserValidator from '../../../validators/userValidator.mjs'
 import { checkSchema } from 'express-validator'
-import ensureAdmin from '../../../middleware/ensureAdmin.mjs'
+import {ensureAdmin, checkAdminWithJWTToken} from '../../../middleware/ensureAdmin.mjs'
 
 const router = express.Router()
 

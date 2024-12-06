@@ -20,6 +20,8 @@ export function parseBearer(bearer, headers) {
     return decoded // Повертаємо декодовані дані
   } catch (err) {
     // Якщо токен невірний або закінчився його термін дії, буде згенеровано помилку
+	if(err.name === 'TokenExpiredError')
+		return err.name		
     throw new Error('Invalid token')
   }
 }
