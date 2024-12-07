@@ -3,13 +3,15 @@ import { parseBearer } from "../utils/jwtHelpers.mjs"
 
 async function ensureAdmin(req, res, next) {
 	try {
-		console.log(req.user)
-		
-		const role = await TypesDBService.getById(req.user.role)
-		
-		if(role.title !== 'admin') {
-			return res.status(403).json({ error: 'Access Only For Admin'})
+		if(req.user) {
+			const role = await TypesDBService.getById(req.user.role)
+			if(role.title !== 'admin') {
+				return res.status(403).json({ error: 'Access Only For Admin'})
+			}
+		} else {
+			return res.status(401).json({ error: 'Need to log in for access'})
 		}
+		
 		next()
 	} catch (error) {
 		res.status(500).json({ result: "Internal Server Error ", error })
@@ -25,7 +27,7 @@ async function checkAdminWithJWTToken (req, res, next) {
 		const decoded = parseBearer(token, req.headers)
 		console.log('decoded===>', decoded)
 		if (decoded === 'TokenExpiredError'){
-			return 'Your session is expired, log in again'
+			return 'Your session is expired. You need to log in again'
 		}
 		return true
 	} catch (error) {
