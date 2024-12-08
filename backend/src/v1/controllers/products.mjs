@@ -84,16 +84,20 @@ class ProductController {
 		try {
 			const productData = { imgSrc: req.file.filename, ...req.body, providers }
 			console.log(productData);
-			
-			await ProductsDBService.create(productData)
-			return res.status(200).json({
-				massage: 'Product created successfully' 
-			})
+			const isAdmin = await checkAdminWithJWTToken(req)
+			if(isAdmin){
+				await ProductsDBService.create(productData)
+				return res.status(200).json({
+					message: 'Product created successfully' 
+				})
+			} else {
+				return res.status(400).json({
+					message: 'Access Denied' 
+				})
+			}
 		} catch (error) {
 			return res.status(500).json({
-				errors: [{ msg: error.message }],
-				product: req.body,
-				providers
+				errors: [{ msg: error }]
 			 })
 		}
 	}
@@ -141,7 +145,7 @@ class ProductController {
 			const updatedProductData = req.file ? { ...req.body, imgSrc: req.file.filename, providers} : {...req.body, imgSrc, providers}
 			await ProductsDBService.update(req.params.id, updatedProductData)
 			return res.status(200).json({
-				massage: 'Product updated successfully' 
+				message: 'Product updated successfully' 
 			})
 		} catch (error) {
 			return res.status(500).json({

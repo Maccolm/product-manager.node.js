@@ -8,7 +8,11 @@ const router = express.Router()
 
 router.get('/', UserController.usersList)
 
-router.get('/register/:id?', ensureAdmin, UserController.registerForm)
+router.get(
+	'/register/:id?', 
+	ensureAdmin, 
+	UserController.registerForm
+)
 
 router.get('/types', UserController.getTypes)
 
