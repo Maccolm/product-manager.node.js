@@ -10,5 +10,5 @@ router.post('/login', AuthController.login)
 // logout
 router.get('/logout',AuthController.logout)
 
-// router.post('/signup', UserController.signup)
+router.post('/signup', UserController.signup)
 export default router
