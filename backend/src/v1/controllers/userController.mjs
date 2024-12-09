@@ -1,6 +1,7 @@
 import UsersDBService from '../models/user/UsersDBService.mjs'
 import TypesDBService from '../models/type/TypesDBService.mjs'
 import { validationResult } from 'express-validator'
+import { prepareToken } from '../../../utils/jwtHelpers.mjs'
 
 class UserController {
   static async usersList(req, res) {
@@ -85,6 +86,49 @@ class UserController {
         user: req.user,
       })
     }
+  }
+  static async signup(req, res) {
+	  const errors = validationResult(req)
+	  
+	  if (!errors.isEmpty()) {
+		  return res.status(400).json({ errors: errors.array() });
+		}
+		try {
+		const types = await TypesDBService.getList()
+		const typeId = types.find(type => type.title === 'user')?._id
+		const user = {...req.body, type: typeId}
+		const existingUser = await UsersDBService.findOne({email: user.email})
+		
+		if(existingUser) {
+			return res.status(409).json({error: 'Email already registered'})
+		}
+		await UsersDBService.create(user)
+
+		const token = prepareToken(
+			{
+				id: user._id,
+				username: user.username,
+				role: user.type
+			},
+			req.headers
+		);
+		res.json({
+			result: "Authorized",
+			token,
+		})
+	} catch (error) {
+		console.error(error)
+		if ( error.code === 11000 ) {
+			const duplicateField = Object.keys(error.keyValue)[0]
+			const duplicateValue = error.keyValue[duplicateField]
+
+			return res.status(409).json({ error: `"${duplicateField}" with value: "${duplicateValue}" already exist, please choose another "${duplicateField}"` })
+		}
+		return res.status(500).json({ 
+			error: 'Internal server error',
+			details: error.message,
+		})
+	}
   }
   static async getTypes(req, res) {
 	try {

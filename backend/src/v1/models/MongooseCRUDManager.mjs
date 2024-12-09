@@ -37,7 +37,8 @@ class MongooseCRUDManager {
 		 const newItem = new this.model(data)
 		 return await newItem.save()
 	  } catch (error) {
-		 throw new Error('Error creating data: ' + error.message)
+		console.error('Error creating data: ' + error.message);
+		 throw error
 	  }
 	}
  

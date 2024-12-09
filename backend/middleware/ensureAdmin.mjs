@@ -32,6 +32,10 @@ async function checkAdminWithJWTToken (req, res, next) {
 		if (decoded === 'TokenExpiredError'){
 			return 'Your session is expired. You need to log in again'
 		}
+		const role = await TypesDBService.getById(decoded.role)
+			if(role.title !== 'admin') {
+				return false
+			}
 		return true
 	} catch (error) {
 		console.log(error)
