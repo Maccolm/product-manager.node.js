@@ -11,13 +11,8 @@ const __dirname = path.dirname(__filename)
 
 class ProductController {
 	static async allProducts(req, res) {
-		const filters = {}
 		try {
-			for(const key in req.query){
-				if(req.query[key])
-					filters[key] = req.query[key]
-			}
-			const productList = await ProductsDBService.getList(filters)
+			const productList = await ProductsDBService.getList(req.query)
 			const providers = await ProvidersDBService.getList()
 			const isAdmin = await checkAdminWithJWTToken(req)
 			console.log('isAdmin controller' , isAdmin);
