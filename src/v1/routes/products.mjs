@@ -4,6 +4,7 @@ import multer from 'multer'
 import FormValidator from '../../../validators/formValidator.mjs'
 import { checkSchema } from 'express-validator'
 import { ensureAdmin } from '../../../middleware/ensureAdmin.mjs'
+import FilterService from '../controllers/filtersController.mjs'
 
 const router = Router()
 
@@ -18,6 +19,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage })
 
 router.get('/', ProductController.allProducts)
+router.get('/filters-data', FilterService.getFiltersData)
 router.get('/create', 
 	ProductController.createForm)
 router.post('/create', 
