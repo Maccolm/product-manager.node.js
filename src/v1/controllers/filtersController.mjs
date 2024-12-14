@@ -4,6 +4,8 @@ import UsersDBService from '../models/user/UsersDBService.mjs'
 class FilterService {
   static async getFiltersData(req, res) {
     try {
+		console.log('req-query=====>', req.query)
+		
       // Виконання запитів паралельно з використанням Promise.all
       const [typesList, usersList] = await Promise.all([
         TypesDBService.getList(),
