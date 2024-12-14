@@ -44,6 +44,9 @@ class ProductsDBService extends MongooseCRUDManager{
 				},
 			]
 		)
+		console.log('reqQuery',reqQuery);
+		console.log('res',res);
+		
       return res
     } catch (error) { 
 		console.log(error);
