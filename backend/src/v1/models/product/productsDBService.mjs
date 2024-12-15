@@ -27,7 +27,7 @@ class ProductsDBService extends MongooseCRUDManager{
   * @returns {Promise<Product[]>} - Promise, який вирішується масивом знайдених продуктів.
   */
 
-  static async getList(reqQuery) { 
+async getListWithQuery(reqQuery) { 
     try { 
 		const res = await this.findManyWithSearchOptions(
 			reqQuery,
