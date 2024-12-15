@@ -38,7 +38,7 @@ async getListWithQuery(reqQuery) {
 					fieldForPopulation: {
 						path: 'provider',
 						populate: {
-							path: 'type',
+							path: 'title',
 						},
 					},
 				},
