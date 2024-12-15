@@ -12,14 +12,13 @@ const __dirname = path.dirname(__filename)
 class ProductController {
 	static async allProducts(req, res) {
 		try {
-			const productList = await ProductsDBService.getListWithQuery(req.query)
+			const data = await ProductsDBService.getListWithQuery(req.query)
 			const providers = await ProvidersDBService.getList()
 			const isAdmin = await checkAdminWithJWTToken(req)
 			console.log('isAdmin controller' , isAdmin);
-			console.log('Product List' , productList)
 			
 			res.json({
-				products: productList,
+				data,
 				providers,
 				isAdmin
 			})

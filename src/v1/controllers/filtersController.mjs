@@ -1,15 +1,15 @@
-import ProductsDBService from '../models/product/productsDBService.mjs'
 import TypesDBService from '../models/type/TypesDBService.mjs'
 import UsersDBService from '../models/user/UsersDBService.mjs'
+import ProvidersDBService from '../models/provider/providersDBService.mjs'
 
 class FilterService {
   static async getFiltersData(req, res) {
     try {
       // Виконання запитів паралельно з використанням Promise.all
-      const [typesList, usersList, products] = await Promise.all([
+      const [typesList, usersList, providers] = await Promise.all([
         TypesDBService.getList(),
         UsersDBService.getListWithoutAdmin(),
-			ProductsDBService.getList(req.query)
+		  ProvidersDBService.getList()
       ])
 
       // Повернення об'єднаних даних
@@ -17,7 +17,7 @@ class FilterService {
         data: {
           types: typesList,
           users: usersList,
-			 products
+			 providers
         },
         success: true,
       })
