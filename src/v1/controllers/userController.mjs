@@ -11,7 +11,7 @@ class UserController {
         if (req.query[key]) filters[key] = req.query[key]
       }
 
-      const dataList = await UsersDBService.getList(filters)
+      const dataList = await UsersDBService.getList(filters, { password: 0 }, ['type'])
 
       res.json({
         users: dataList,
