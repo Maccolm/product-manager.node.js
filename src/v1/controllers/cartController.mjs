@@ -3,7 +3,7 @@ import ProductsDBService from '../models/product/ProductsDBService.mjs'
 
 class ProductController {
   // Метод для отримання всіх товарів
-  static async getCartDetails(req, res) {
+  static async getCartDetails(req, res) { //ТРЕБА ПОФІКСИТИ, ПРИХОДИТЬ ЗАНАДТО БАГАТО ДАНИХ
     try {
       if (!req.user) {
         return res.status(403).json({ error: 'Access denied' })
@@ -21,6 +21,7 @@ class ProductController {
   }
   // -------------
   static async addProduct(req, res) {
+	
     if (!req.user) {
       return res.status(403).json({ error: 'Access denied' })
     }
@@ -40,7 +41,7 @@ class ProductController {
         userId,
         productId,
       })
-
+		
       res.status(200).json({ message: 'Product added successfully' })
     } catch (err) {
       console.log(err)
