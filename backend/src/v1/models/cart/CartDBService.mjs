@@ -106,11 +106,10 @@ class CartDBService extends MongooseCRUDManager {
   async getCartDetails(userId) {
     try {
       // Знаходимо корзину за userId та заповнюємо зв'язані поля
-      const cartDetails = await Cart.findOne({
-        customer: userId,
-      })
+      const cartDetails = await Cart.findOne({customer: userId})
         .populate({
           path: 'customer',
+			 select: '-password',
           populate: {
             path: 'type', // Заповнюємо тип користувача
           },
@@ -118,13 +117,11 @@ class CartDBService extends MongooseCRUDManager {
         .populate({
           path: 'productsList.product',
           populate: {
-            path: 'seller',
-            populate: {
-              path: 'type', // Заповнюємо тип продавця
-            },
+            path: 'provider',
           },
         })
-
+		  console.log('cartDetails====>',cartDetails);
+		  
       if (!cartDetails) {
         throw new Error('Cart not found') // Викидання помилки, якщо корзину не знайдено
       }
@@ -137,10 +134,9 @@ class CartDBService extends MongooseCRUDManager {
       if (products.length) {
         products = cartDetails.productsList.map((item) => ({
           details: item.product,
-          seller: {
-            name: item.product.seller.username,
-            _id: item.product.seller._id,
-            type: item.product.seller.type.title,
+          provider: {
+            name: item.product.provider.title,
+            _id: item.product.provider._id,
           },
           totalProductsPrice: item.product.price * item.amount,
           amount: item.amount,

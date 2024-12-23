@@ -2,6 +2,7 @@ import express from "express";
 import productsRouter from "./products.mjs"
 import authRouter from "./auth.mjs"
 import usersRouter from './users.mjs'
+import cartRouter from './cartRoutes.mjs'
 
 const router = express.Router()
 
@@ -11,6 +12,7 @@ router.get('/', (req, res) => {
 router.use('/auth', authRouter)
 router.use('/products', productsRouter)
 router.use('/users', usersRouter)
+router.use('/cart', cartRouter)
 router.get("/about", (req, res) => {
 	res.sendFile(path.join(__dirname, 'public', 'about.html'))
 })
