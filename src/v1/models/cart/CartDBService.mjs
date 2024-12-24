@@ -120,12 +120,10 @@ class CartDBService extends MongooseCRUDManager {
             path: 'provider',
           },
         })
-		  console.log('cartDetails====>',cartDetails);
 		  
       if (!cartDetails) {
         throw new Error('Cart not found') // Викидання помилки, якщо корзину не знайдено
       }
-
       // Обчислення потрібних полів
       const customer = cartDetails.customer
       let products = cartDetails.productsList
@@ -133,11 +131,7 @@ class CartDBService extends MongooseCRUDManager {
 
       if (products.length) {
         products = cartDetails.productsList.map((item) => ({
-          details: item.product,
-          provider: {
-            name: item.product.provider.title,
-            _id: item.product.provider._id,
-          },
+          details: {...JSON.parse(JSON.stringify(item.product))},
           totalProductsPrice: item.product.price * item.amount,
           amount: item.amount,
         }))
@@ -147,7 +141,6 @@ class CartDBService extends MongooseCRUDManager {
           0
         )
       }
-
       return {
         customer,
         products,

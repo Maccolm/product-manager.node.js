@@ -1,19 +1,30 @@
+import isTokenValid from '../../../middleware/isTokenValid.mjs'
 import CartDBService from '../models/cart/CartDBService.mjs'
 import ProductsDBService from '../models/product/ProductsDBService.mjs'
 
 class ProductController {
   // Метод для отримання всіх товарів
-  static async getCartDetails(req, res) { //ТРЕБА ПОФІКСИТИ, ПРИХОДИТЬ ЗАНАДТО БАГАТО ДАНИХ
+  static async getCartDetails(req, res) { 
     try {
       if (!req.user) {
         return res.status(403).json({ error: 'Access denied' })
       }
       const userId = req.user.id // Отримання id користувача
-
+		const token = await isTokenValid(req)
+		//якщо токен не валідний поверртаємо помилку
+		if (!token){
+			return res.status(401).json({ 
+				error: 'Token is not valid', 
+				message: 'Your session is expired, please log in again to continue' 
+			})
+		}
       const cartDetails = await CartDBService.getCartDetails(userId)
+		console.log('cartDetails======>', cartDetails)
+
       res.status(200).json({
         data: cartDetails,
         user: req.user,
+		  isTokenValid
       })
     } catch (error) {
       res.status(500).json({ error: 'Error fetching products' })
@@ -53,7 +64,6 @@ class ProductController {
       return res.status(403).json({ error: 'Access denied' })
     }
     const userId = req.user.id // Отримання id користувача
-
     try {
       const { productId, amount } = req.body // Отримання id продукту та кількості з тіла запиту
       // Перевірка чи існує продукт const
@@ -83,8 +93,8 @@ class ProductController {
     const userId = req.user.id // Отримання id користувача
 
     try {
-      const { id } = req.body
-      await CartDBService.deleteProduct({ userId, productId: id })
+      const productId = req.params.id
+      await CartDBService.deleteProduct({ userId, productId })
       res.status(200).json({ message: 'Product deleted' })
     } catch (error) {
       res.status(500).json({ error: 'Error deleting product' })
