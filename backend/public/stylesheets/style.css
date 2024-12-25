@@ -174,9 +174,7 @@ img {
 	border: none;
 	border-radius: 6px;
 }
-.filter__btn{
-	margin-right: 10px;
-}
+
 .product__text {
 	text-transform: capitalize;
 	font-size: 18px;
