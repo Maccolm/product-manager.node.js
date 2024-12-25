@@ -2,7 +2,7 @@ import isTokenValid from '../../../middleware/isTokenValid.mjs'
 import CartDBService from '../models/cart/CartDBService.mjs'
 import ProductsDBService from '../models/product/ProductsDBService.mjs'
 
-class ProductController {
+class CartController {
   // Метод для отримання всіх товарів
   static async getCartDetails(req, res) { 
     try {
@@ -102,4 +102,4 @@ class ProductController {
   }
 }
 
-export default ProductController
+export default CartController
