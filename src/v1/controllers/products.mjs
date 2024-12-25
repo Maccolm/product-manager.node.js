@@ -29,10 +29,11 @@ class ProductController {
 	static async productDetails(req, res) {
 		try{
 			const id = req.params.id
-			const product = await ProductsDBService.getById(id)
-			
+			const product = await ProductsDBService.getById(id, ['provider'])
+			const isAdmin = await checkAdminWithJWTToken(req)
 			res.json({
 				product,
+				isAdmin
 			})
 		} catch {
 			res.status(500).json({ error: error.message })
