@@ -1,5 +1,7 @@
 import { parseBearer } from "../utils/jwtHelpers.mjs"
 import { match } from "path-to-regexp";
+import UsersDBService from "../services/UsersDBService.mjs"
+
 // Функція для налаштування аутентифікації та авторизації
 const auth = (app) => {
 	// Middleware для налаштування заголовків CORS
@@ -16,7 +18,7 @@ const auth = (app) => {
 		next() // Передача обробки наступному middleware
 	});
 	// Middleware для перевірки аутентифікації та авторизації
-	app.use((req, res, next) => {
+	app.use( async (req, res, next) => {
 		// Відкриті шляхи, які не потребують авторизації
 		const openPaths = [
 			"/api/v1/auth/login",
@@ -36,7 +38,8 @@ const auth = (app) => {
 			
 			try {
 				// Парсинг токена та додавання користувача до запиту
-				req.user = parseBearer(req.headers.authorization, req.headers)
+				const userData = parseBearer(req.headers.authorization, req.headers)
+				req.user = await UsersDBService.getUserById(userData.id, ['type'])
 			} catch (err) {
 				// Якщо авторизація не вдалася, повертається статус 401
 				return res.status(401).json({ result: "Access Denied" })
@@ -45,5 +48,23 @@ const auth = (app) => {
 		next() // Передача обробки наступному middleware
 	})
 }
+
+// Middleware для перевірки дозволів
+const getPermissionsChecker = (model) => (requiredPermission) => {
+	return (req, res, next) => {
+	  if (!req.user) {
+		 return res.status(403).json({ result: 'Permission Denied' })
+	  }
+	  // Перевірка, чи є необхідний дозвіл у користувача
+	  const hasPermission =
+		 req.user?.type?.pagesPermissions[model][requiredPermission]
+ 
+	  if (hasPermission) {
+		 next() // Передача обробки наступному middleware
+	  } else {
+		 res.status(403).json({ result: 'Permission Denied' })
+	  }
+	}
+ }
 // Експорт функції auth як модуля за замовчуванням
-export default auth
+export { auth, getPermissionsChecker }
