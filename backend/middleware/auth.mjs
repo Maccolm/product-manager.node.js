@@ -1,7 +1,6 @@
 import { parseBearer } from "../utils/jwtHelpers.mjs"
-import { match } from "path-to-regexp";
-import UsersDBService from "../services/UsersDBService.mjs"
-
+import { match } from "path-to-regexp"
+import UsersDBService from "../src/v1/models/user/UsersDBService.mjs";
 // Функція для налаштування аутентифікації та авторизації
 const auth = (app) => {
 	// Middleware для налаштування заголовків CORS
