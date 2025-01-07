@@ -19,28 +19,35 @@ const storage = multer.diskStorage({
 })
 const upload = multer({ storage })
 
-router.get('/', permissionsChecker('read'), ProductController.allProducts)
+router.get('/', ProductController.allProducts)
 router.get('/filters-data', FilterService.getFiltersData)
 router.get('/create', 
+	permissionsChecker('read'),
 	ProductController.createForm)
 router.post('/create', 
+	permissionsChecker('create'),
 	upload.single('imgSrc'),
 	checkSchema(FormValidator.formSchema), 
-	ProductController.createProduct)
+	ProductController.createProduct
+)
 router.get('/:id', permissionsChecker('read'), ProductController.productDetails)
-router.get('/edit/:id',
-	ensureAdmin,
-	ProductController.editProductForm)
+router.get(
+	'/edit/:id',
+	ProductController.editProductForm
+)
 router.post('/edit/:id',
-	ensureAdmin,
+	permissionsChecker('update'),
 	upload.single('imgSrc'), 
 	checkSchema(FormValidator.formSchema), 
-	ProductController.updateProduct)
-router.post('/', 
-	ensureAdmin,
-	ProductController.createProduct)
+	ProductController.updateProduct
+)
+// router.post('/', 
+// 	permissionsChecker('create'),
+// 	ensureAdmin,
+// 	ProductController.createProduct)
 router.delete('/:id', 
-	ensureAdmin,
-	ProductController.deleteProduct)
+	permissionsChecker('delete'),
+	ProductController.deleteProduct
+)
 	
 export default router
