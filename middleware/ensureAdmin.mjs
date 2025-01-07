@@ -14,7 +14,6 @@ async function ensureAdmin(req, res, next) {
 		if(!req.user){
 			return res.status(401).json({ error: 'Need to log in for access'})
 		}
-		
 		next()
 	} catch (error) {
 		res.status(500).json({ result: "Internal Server Error", error })

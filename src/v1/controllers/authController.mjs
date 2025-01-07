@@ -39,6 +39,7 @@ class AuthController {
 			res.json({
 				result: "Authorized",
 				token,
+				pagesPermissions: user.type.pagesPermissions,
 			})
 		} catch (err) {
 			console.error("Error in login:", err);
