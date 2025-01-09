@@ -5,12 +5,12 @@ import { getPermissionsChecker } from '../../../middleware/auth.mjs'
 const router = express.Router()
 const permissionsChecker = getPermissionsChecker('usersTypes')
 
-router.get('/:id', permissionsChecker('read'), usersTypesController.getById)
-router.get('/', permissionsChecker('read'), usersTypesController.getList)
+router.get('/:id', usersTypesController.getById)
+router.get('/', usersTypesController.getList)
 
 router.post(
   '/register/:id?',
-  permissionsChecker('update'),
+
   usersTypesController.register
 )
 
