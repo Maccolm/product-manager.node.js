@@ -38,7 +38,9 @@ const auth = (app) => {
 			try {
 				// Парсинг токена та додавання користувача до запиту
 				const userData = parseBearer(req.headers.authorization, req.headers)
-				req.user = await UsersDBService.getUserById(userData.id, ['type'])
+				// const rqUser = await UsersDBService.getUserById(userData.id, ['type'])
+				// console.log('req.user =', rqUser);
+				
 			} catch (err) {
 				// Якщо авторизація не вдалася, повертається статус 401
 				return res.status(401).json({ result: "Access Denied" })
