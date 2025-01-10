@@ -14,6 +14,6 @@ router.post(
   usersTypesController.register
 )
 
-router.delete('/', permissionsChecker('delete'), usersTypesController.delete)
+router.delete('/:id', usersTypesController.delete)
 
 export default router
