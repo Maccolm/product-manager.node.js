@@ -57,8 +57,13 @@ class TypeController {
   }
 
   static async delete(req, res) {
-    try {
-      await TypesDBService.deleteById(req.body.id)
+   const id = req.params.id 
+	if(!id) {
+		console.log('no user id found', id)	
+		res.status(401).json({error: 'no user found to delete'})
+	}
+	try {
+      await TypesDBService.deleteById(id)
       res.json({ success: true })
     } catch (error) {
       res
