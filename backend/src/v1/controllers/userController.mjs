@@ -5,17 +5,16 @@ import { prepareToken } from '../../../utils/jwtHelpers.mjs'
 
 class UserController {
   static async usersList(req, res) {
-    try {
+    try {		
       const filters = {}
       for (const key in req.query) {
         if (req.query[key]) filters[key] = req.query[key]
       }
 
       const dataList = await UsersDBService.getList(filters, { password: 0 }, ['type'])
-
+		
       res.json({
         users: dataList,
-        userr: req.user,
       })
     } catch (err) {
       res.status(500).json({ error: err.message })

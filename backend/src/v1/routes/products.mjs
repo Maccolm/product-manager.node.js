@@ -3,8 +3,7 @@ import { Router } from 'express'
 import multer from 'multer'
 import FormValidator from '../../../validators/formValidator.mjs'
 import { checkSchema } from 'express-validator'
-import { ensureAdmin } from '../../../middleware/ensureAdmin.mjs'
-import { getPermissionsChecker } from '../../../middleware/auth.mjs'
+import { getPermissionsChecker, authenticateToken } from '../../../middleware/auth.mjs'
 import FilterService from '../controllers/filtersController.mjs'
 
 const router = Router()
@@ -41,10 +40,9 @@ router.post('/edit/:id',
 	checkSchema(FormValidator.formSchema), 
 	ProductController.updateProduct
 )
-// router.post('/', 
-// 	permissionsChecker('create'),
-// 	ensureAdmin,
-// 	ProductController.createProduct)
+router.post('/', 
+	permissionsChecker('create'),
+	ProductController.createProduct)
 router.delete('/:id', 
 	permissionsChecker('delete'),
 	ProductController.deleteProduct
