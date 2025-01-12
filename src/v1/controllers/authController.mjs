@@ -1,5 +1,6 @@
 import User from "../models/user/User.mjs"
 import UsersDBService from "../models/user/UsersDBService.mjs"
+import TypesDBService from "../models/type/TypesDBService.mjs"
 import { prepareToken } from "../../../utils/jwtHelpers.mjs";
 
 class AuthController {
@@ -20,6 +21,8 @@ class AuthController {
 				console.log("User not found for email:", req.body.email)
 				return res.status(401).json({ error: "User not found" })
 			}
+			const userType = await TypesDBService.getById(user.type)
+			
 			console.log("Validating password for user:", user.email)
 			const isValid = await user.validPassword(req.body.password)
 			console.log('password valid', isValid)
@@ -39,7 +42,7 @@ class AuthController {
 			res.json({
 				result: "Authorized",
 				token,
-				pagesPermissions: user.type.pagesPermissions,
+				pagesPermissions: userType?.pagesPermissions,
 			})
 		} catch (err) {
 			console.error("Error in login:", err);

@@ -1,7 +1,6 @@
 import ProductsDBService from '../models/product/productsDBService.mjs'
 import ProvidersDBService from '../models/provider/providersDBService.mjs'
 import { validationResult } from 'express-validator'
-import { ensureAdmin ,checkAdminWithJWTToken } from '../../../middleware/ensureAdmin.mjs'
 import fs from 'fs'
 import path from 'path'
 import { fileURLToPath } from 'url'
@@ -14,13 +13,9 @@ class ProductController {
 		try {
 			const data = await ProductsDBService.getListWithQuery(req.query)
 			const providers = await ProvidersDBService.getList()
-			const isAdmin = await checkAdminWithJWTToken(req)
-			console.log('isAdmin controller' , isAdmin);
-			
 			res.json({
 				data,
 				providers,
-				isAdmin
 			})
 		} catch (error) {
 			res.status(500).json({ error: error.message })
@@ -30,10 +25,8 @@ class ProductController {
 		try{
 			const id = req.params.id
 			const product = await ProductsDBService.getById(id, ['provider'])
-			const isAdmin = await checkAdminWithJWTToken(req)
 			res.json({
 				product,
-				isAdmin
 			})
 		} catch {
 			res.status(500).json({ error: error.message })
@@ -80,17 +73,11 @@ class ProductController {
 		try {
 			const productData = { imgSrc: req.file.filename, ...req.body, providers }
 			console.log(productData);
-			const isAdmin = await checkAdminWithJWTToken(req)
-			if(isAdmin){
 				await ProductsDBService.create(productData)
 				return res.status(200).json({
 					message: 'Product created successfully' 
 				})
-			} else {
-				return res.status(400).json({
-					message: 'Access Denied' 
-				})
-			}
+
 		} catch (error) {
 			return res.status(500).json({
 				errors: [{ msg: error }]

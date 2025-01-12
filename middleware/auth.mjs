@@ -1,6 +1,6 @@
 import { parseBearer } from "../utils/jwtHelpers.mjs"
 import { match } from "path-to-regexp"
-import UsersDBService from "../src/v1/models/user/UsersDBService.mjs";
+
 // Функція для налаштування аутентифікації та авторизації
 const auth = (app) => {
 	// Middleware для налаштування заголовків CORS
@@ -53,13 +53,15 @@ const auth = (app) => {
 // Middleware для перевірки дозволів
 const getPermissionsChecker = (model) => (requiredPermission) => {
 	return (req, res, next) => {
-	  if (!req.user) {
+		const userPermissionsHeader = req.headers['permissions']
+	  if (!userPermissionsHeader) {
 		 return res.status(403).json({ result: 'Permission Denied' })
 	  }
+
+	  let userPermissions = JSON.parse(userPermissionsHeader)
 	  // Перевірка, чи є необхідний дозвіл у користувача
-	  const hasPermission =
-		 req.user?.type?.pagesPermissions[model][requiredPermission]
- 
+	  const hasPermission = userPermissions?.[model]?.[requiredPermission]
+	  
 	  if (hasPermission) {
 		 next() // Передача обробки наступному middleware
 	  } else {
@@ -67,5 +69,26 @@ const getPermissionsChecker = (model) => (requiredPermission) => {
 	  }
 	}
  }
+ const authenticateToken = (req, res, next) => {
+	const authHeader = req.headers['authorization']
+	if (!authHeader)
+		return res.status(401).json({ message: 'No token provided' })
+
+	const token = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : null
+	if (!token) {
+		return res.status(401).json({ message: 'Invalid token format' })
+	}
+
+	try {
+		const decoded = jwt.verify(token, prepareSecret(req.headers))
+		req.user = decoded
+		next()
+	} catch (error) {
+		if (err.name === 'TokenExpiredError') {
+			return res.status(401).json({ message: 'Token expired' })
+		}
+		return res.status(403).json({ message: 'Invalid token' })
+	}
+ }
 // Експорт функції auth як модуля за замовчуванням
-export { auth, getPermissionsChecker }
+export { auth, getPermissionsChecker, authenticateToken }
